@@ -27,4 +27,7 @@ public:
 	virtual BOOL OnInitDialog();
 	void UpdateProcessList();
 	void GetAllRunningProcess(std::vector<PROCESSENTRY32>* processList);
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	std::vector<PROCESSENTRY32> m_procList;
+	bool IsFindItemInList(std::vector<PROCESSENTRY32> list, DWORD pid);
 };
