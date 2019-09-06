@@ -39,6 +39,12 @@
     <ClInclude Include="COtherDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="CMyListCtrl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Func.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TaskManager.cpp">
@@ -57,6 +63,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="COtherDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CMyListCtrl.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Func.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

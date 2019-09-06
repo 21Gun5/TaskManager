@@ -100,7 +100,7 @@ BOOL CTaskManagerDlg::OnInitDialog()
 	// 设置此对话框的图标。  当应用程序主窗口不是对话框时，框架将自动
 	//  执行此操作
 	SetIcon(m_hIcon, TRUE);			// 设置大图标
-	SetIcon(m_hIcon, FALSE);		// 设置小图标
+	SetIcon(m_hIcon, FALSE);		    // 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
 
@@ -111,7 +111,7 @@ BOOL CTaskManagerDlg::OnInitDialog()
 	m_myTable.m_dlg[0] = new CProcessDlg();
 	m_myTable.m_dlg[1] = new COtherDlg();
 	// 创建子窗口
-	m_myTable.m_dlg[0]->Create(IDD_DIALOG1,&m_myTable);
+	m_myTable.m_dlg[0]->Create(IDD_DIALOG_PROCESS,&m_myTable);
 	m_myTable.m_dlg[1]->Create(IDD_DIALOG2, &m_myTable);
 	// 控制两个窗口的大小
 	CRect  rec;
