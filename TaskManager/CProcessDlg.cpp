@@ -30,6 +30,8 @@ void CProcessDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CProcessDlg, CDialogEx)
 	ON_WM_TIMER()
+	ON_NOTIFY(NM_RCLICK, IDC_LIST1, &CProcessDlg::OnRclickList1)
+	ON_COMMAND(ID_MENU_KILLPROC, &CProcessDlg::OnMenuKillproc)
 END_MESSAGE_MAP()
 
 
@@ -40,7 +42,10 @@ BOOL CProcessDlg::OnInitDialog()
 
 	// TODO:  在此添加额外的初始化
 
-		// 设置 list 控件的扩展风格
+	// 导入菜单资源
+	m_menu.LoadMenu(IDR_MENU1);
+
+	// 设置 list 控件的扩展风格
 	m_list.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
 
 	// 显示字段名（插入列
@@ -163,4 +168,34 @@ bool CProcessDlg::IsFindItemInList(std::vector<PROCESSENTRY32> list, DWORD pid)
 		}
 	}
 	return false;
+}
+
+
+void CProcessDlg::OnRclickList1(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	// TODO: 在此添加控件通知处理程序代码
+	*pResult = 0;
+	CMenu * pSubMenu = m_menu.GetSubMenu(0);
+	CPoint pos;
+	GetCursorPos(&pos);
+	pSubMenu->TrackPopupMenu(0, pos.x, pos.y, this);
+}
+
+
+void CProcessDlg::OnMenuKillproc()
+{
+	// TODO: 在此添加命令处理程序代码
+
+	// 获取待结束进程（通过光标
+	int index = (int)m_list.GetFirstSelectedItemPosition() - 1;// 要-1，因一个始于0一个始于1
+	// 获取进程id（字符串转整形
+	CString strPid = m_list.GetItemText(index, 1);// 第1列是pid
+	DWORD dwPid = _wtoi(strPid);
+	// 获取进程句柄（要通过句柄来结束进程
+	HANDLE hProc = OpenProcess(PROCESS_TERMINATE, FALSE, dwPid);
+	// 结束进程
+	TerminateProcess(hProc, 0);
+	// 关闭句柄
+	CloseHandle(hProc);
 }
