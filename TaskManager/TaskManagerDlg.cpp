@@ -8,7 +8,7 @@
 #include "afxdialogex.h"
 
 #include "CProcessDlg.h"
-#include "COtherDlg.h"
+#include "COther.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -61,13 +61,14 @@ CTaskManagerDlg::CTaskManagerDlg(CWnd* pParent /*=nullptr*/)
 void CTaskManagerDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_TAB1, m_myTable);
+	DDX_Control(pDX, IDC_TAB1, m_tab);
 }
 
 BEGIN_MESSAGE_MAP(CTaskManagerDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_NOTIFY(TCN_SELCHANGE, IDC_TAB1, &CTaskManagerDlg::OnSelchangeTab1)
 END_MESSAGE_MAP()
 
 
@@ -100,28 +101,30 @@ BOOL CTaskManagerDlg::OnInitDialog()
 	// 设置此对话框的图标。  当应用程序主窗口不是对话框时，框架将自动
 	//  执行此操作
 	SetIcon(m_hIcon, TRUE);			// 设置大图标
-	SetIcon(m_hIcon, FALSE);		    // 设置小图标
+	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
 
 	// tab 控件添加项
-	m_myTable.InsertItem(0, L"进程信息");
-	m_myTable.InsertItem(1, L"其他信息");
+	m_tab.InsertItem(0, L"进程信息");
+	m_tab.InsertItem(1, L"其他信息");
 	// 给子窗口指针赋值
-	m_myTable.m_dlg[0] = new CProcessDlg();
-	m_myTable.m_dlg[1] = new COtherDlg();
-	// 创建子窗口
-	m_myTable.m_dlg[0]->Create(IDD_DIALOG_PROCESS,&m_myTable);
-	m_myTable.m_dlg[1]->Create(IDD_DIALOG2, &m_myTable);
+	CDialogEx * pSubProcWnd = new CProcessDlg();
+	CDialogEx * pSubOtherWnd = new COther();
+	//创建子窗口
+	pSubProcWnd->Create(IDD_DIALOG_PROCESS, &m_tab);
+	pSubOtherWnd->Create(IDD_DIALOG_OTHER, &m_tab);
+	m_tabSubWnd.push_back(pSubProcWnd);
+	m_tabSubWnd.push_back(pSubOtherWnd);
 	// 控制两个窗口的大小
 	CRect  rec;
-	m_myTable.GetClientRect(rec);
+	m_tab.GetClientRect(rec);
 	rec.DeflateRect(8, 40, 10, 10);
-	m_myTable.m_dlg[0]->MoveWindow(rec);
-	m_myTable.m_dlg[1]->MoveWindow(rec);
-	// 初始显示第一个窗口
-	m_myTable.m_dlg[0]->ShowWindow(SW_SHOW);
-	m_myTable.m_dlg[1]->ShowWindow(SW_HIDE);
+	pSubProcWnd->MoveWindow(rec);
+	pSubOtherWnd->MoveWindow(rec);
+	//初始显示第一个窗口
+	pSubProcWnd->ShowWindow(SW_SHOW);
+	pSubOtherWnd->ShowWindow(SW_HIDE);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -175,3 +178,19 @@ HCURSOR CTaskManagerDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+
+
+void CTaskManagerDlg::OnSelchangeTab1(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	// TODO: 在此添加控件通知处理程序代码
+	*pResult = 0;
+
+	// 隐藏所有
+	for (auto &pWnd : m_tabSubWnd){
+		pWnd->ShowWindow(SW_HIDE);
+	}
+	// 显示当前
+	int curSel = m_tab.GetCurSel();
+	m_tabSubWnd[curSel]->ShowWindow(SW_SHOW);
+
+}

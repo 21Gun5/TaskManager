@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include <vector>
+#include <TlHelp32.h>
 
 // CProcessDlg 对话框
 
@@ -21,7 +23,8 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
-	CListCtrl m_processList;
+	CListCtrl m_list;
 	virtual BOOL OnInitDialog();
 	void UpdateProcessList();
+	void GetAllRunningProcess(std::vector<PROCESSENTRY32>* processList);
 };

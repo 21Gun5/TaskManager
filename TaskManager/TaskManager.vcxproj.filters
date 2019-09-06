@@ -30,19 +30,10 @@
     <ClInclude Include="Resource.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="CMyTabCtrl.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="CProcessDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="COtherDlg.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="CMyListCtrl.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Func.h">
+    <ClInclude Include="COther.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -56,19 +47,10 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="CMyTabCtrl.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="CProcessDlg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="COtherDlg.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="CMyListCtrl.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Func.cpp">
+    <ClCompile Include="COther.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

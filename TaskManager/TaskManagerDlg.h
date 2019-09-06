@@ -3,7 +3,8 @@
 //
 
 #pragma once
-#include "CMyTabCtrl.h"
+#include <vector>
+
 
 // CTaskManagerDlg 对话框
 class CTaskManagerDlg : public CDialogEx
@@ -32,5 +33,7 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
 public:
-	CMyTabCtrl m_myTable;
+	CTabCtrl m_tab;
+	afx_msg void OnSelchangeTab1(NMHDR *pNMHDR, LRESULT *pResult);
+	std::vector<CDialogEx *> m_tabSubWnd;
 };

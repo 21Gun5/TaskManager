@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{A0B83F71-6BCF-44A0-91B0-6BB4367CDFE3}</ProjectGuid>
+    <ProjectGuid>{4A571F2E-8740-454C-9756-B888B3F2AAF5}</ProjectGuid>
     <Keyword>MFCProj</Keyword>
     <RootNamespace>TaskManager</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
@@ -183,11 +183,8 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="CMyListCtrl.h" />
-    <ClInclude Include="CMyTabCtrl.h" />
-    <ClInclude Include="COtherDlg.h" />
+    <ClInclude Include="COther.h" />
     <ClInclude Include="CProcessDlg.h" />
-    <ClInclude Include="Func.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -195,11 +192,8 @@
     <ClInclude Include="TaskManagerDlg.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CMyListCtrl.cpp" />
-    <ClCompile Include="CMyTabCtrl.cpp" />
-    <ClCompile Include="COtherDlg.cpp" />
+    <ClCompile Include="COther.cpp" />
     <ClCompile Include="CProcessDlg.cpp" />
-    <ClCompile Include="Func.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
