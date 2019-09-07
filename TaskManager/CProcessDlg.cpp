@@ -6,6 +6,8 @@
 #include "CProcessDlg.h"
 #include "afxdialogex.h"
 
+#include "CModuleDlg.h"
+
 
 // CProcessDlg 对话框
 
@@ -32,6 +34,7 @@ BEGIN_MESSAGE_MAP(CProcessDlg, CDialogEx)
 	ON_WM_TIMER()
 	ON_NOTIFY(NM_RCLICK, IDC_LIST1, &CProcessDlg::OnRclickList1)
 	ON_COMMAND(ID_MENU_KILLPROC, &CProcessDlg::OnMenuKillproc)
+	ON_COMMAND(ID_MENU_LISTMODULE, &CProcessDlg::OnMenuListmodule)
 END_MESSAGE_MAP()
 
 
@@ -187,8 +190,8 @@ void CProcessDlg::OnMenuKillproc()
 {
 	// TODO: 在此添加命令处理程序代码
 
-	// 获取待结束进程（通过光标
-	int index = (int)m_list.GetFirstSelectedItemPosition() - 1;// 要-1，因一个始于0一个始于1
+	// 获取待结束进程（通过光标选择序号，序号从1开始，故-1
+	int index = (int)m_list.GetFirstSelectedItemPosition() - 1;
 	// 获取进程id（字符串转整形
 	CString strPid = m_list.GetItemText(index, 1);// 第1列是pid
 	DWORD dwPid = _wtoi(strPid);
@@ -198,4 +201,22 @@ void CProcessDlg::OnMenuKillproc()
 	TerminateProcess(hProc, 0);
 	// 关闭句柄
 	CloseHandle(hProc);
+}
+
+
+void CProcessDlg::OnMenuListmodule()
+{
+	// TODO: 在此添加命令处理程序代码
+
+	// 创建模块对话框
+	CModuleDlg moduleDlg(this);
+	// 获取被点击的进程（通过光标选择序号，序号从1开始，故-1
+	int index = (int)m_list.GetFirstSelectedItemPosition() - 1;
+	// 传递进程PID/名字给模块对话框
+	moduleDlg.SetProcessID(m_procList[index].th32ProcessID);
+	CString buffer;
+	buffer.Format(L"%s - 模块列表", m_procList[index].szExeFile);
+	moduleDlg.SetProcessName(buffer);
+	// 运行对话框
+	moduleDlg.DoModal();
 }

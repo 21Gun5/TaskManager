@@ -36,6 +36,12 @@
     <ClInclude Include="COther.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="CTools.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CModuleDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TaskManager.cpp">
@@ -51,6 +57,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="COther.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CTools.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CModuleDlg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

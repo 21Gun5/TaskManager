@@ -33,4 +33,5 @@ public:
 	CMenu m_menu;
 	afx_msg void OnRclickList1(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnMenuKillproc();
+	afx_msg void OnMenuListmodule();
 };
