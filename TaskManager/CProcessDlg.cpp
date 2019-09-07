@@ -7,6 +7,10 @@
 #include "afxdialogex.h"
 
 #include "CModuleDlg.h"
+#include "CTools.h"
+
+// 临界区
+CRITICAL_SECTION g_critical_section;
 
 
 // CProcessDlg 对话框
@@ -53,9 +57,9 @@ BOOL CProcessDlg::OnInitDialog()
 
 	// 显示字段名（插入列
 	m_list.InsertColumn(0, L"名称", 0, 250);
-	m_list.InsertColumn(1, L"PID", 0, 100);
-	m_list.InsertColumn(2, L"CPU", 0, 100);
-	m_list.InsertColumn(3, L"内存", 0, 100);
+	m_list.InsertColumn(1, L"PID", 0, 150);
+	m_list.InsertColumn(2, L"CPU", 0, 150);
+	m_list.InsertColumn(3, L"内存", 0, 150);
 
 	// 动态更新列表
 	SetTimer(0, 1000, NULL);//计时器id、间隔时间、为NULL时本窗口将接收WM_TIMER消息
@@ -72,24 +76,22 @@ void CProcessDlg::UpdateProcessList()
 {
 	// TODO: 在此处添加实现代码.
 
-	// 定义进程数组
-	std::vector <PROCESSENTRY32> newProcList;
 	// 获取进程列表
+	std::vector <PROCESSINFO> newProcList;
 	GetAllRunningProcess(&newProcList);
-
 	// 若列表为空，则是第一次插入
 	if (m_procList.size() == 0)
 	{
 		// 循环插入进程信息（设置内容
 		int index = 0;
-		for (auto &i : newProcList) {
+		for (auto &i : newProcList) 
+		{
 			CString  buffer;// 整型转字符串所用缓冲区
 			m_list.InsertItem(index, _T(""));// 插入行
-
+			
 			m_list.SetItemText(index, 0, i.szExeFile);// 名称
 			buffer.Format(_T("%d"), i.th32ProcessID);
 			m_list.SetItemText(index, 1, buffer);//PID
-
 			index++;
 		}
 		m_procList.swap(newProcList);
@@ -98,7 +100,6 @@ void CProcessDlg::UpdateProcessList()
 	else
 	{
 		//MessageBox(NULL, L"123", MB_OK);
-
 		// 删除已退出进程（旧列表元素到新列表中找,没找到即已退出
 		int index = 0;
 		for (auto it = m_procList.begin(); it != m_procList.end(); )
@@ -112,7 +113,6 @@ void CProcessDlg::UpdateProcessList()
 			index++;
 			it++;		// 不该放到 for 中（因为有erase操作
 		}
-
 		// 插入新创建进程（新列表元素到旧列表中找, 没找到即新建的		
 		for (auto&proc : newProcList)
 		{
@@ -129,25 +129,85 @@ void CProcessDlg::UpdateProcessList()
 			}
 		}
 	}
+
+	//// 1. 获取最新的进程列表
+	//std::vector<PROCESSINFO> newProcList;
+	//GetAllRunningProcess(&newProcList);
+	//// 2. 进入临界区（删增属于原子操作
+	////EnterCriticalSection(&g_critical_section);
+	//// 3. 删除已退出进程（旧列表元素到新列表中找,没找到即已退出
+	//int index = 0;
+	//for (auto it = m_procList.begin(); it != m_procList.end();)
+	//{
+	//	// 没找到即已退出, 将其从进程数组和控件中删除
+	//	if (false == IsFindItemInList(newProcList, it->th32ProcessID))
+	//	{
+	//		it = m_procList.erase(it);
+	//		m_list.DeleteItem(index);
+	//		continue;
+	//	}
+	//	// 刷新内存占用率
+	//	CString buffer;
+	//	DWORD memUsage = GetProcessMemoryused(it->th32ProcessID);
+	//	if (it->dwMemoryUsage != memUsage)
+	//	{
+	//		buffer.Format(_T("%12dKb"), memUsage);
+	//		m_list.SetItemText(index, 3, buffer);
+	//		it->dwMemoryUsage = memUsage;
+	//	}
+	//	// 刷新CPU使用率
+	//	double cpuUsage = GetProcessCPUUsed(it->th32ProcessID);
+	//	if (abs(it->lfCPUUsage - cpuUsage) >= 0.001)
+	//	{
+	//		buffer.Format(_T("%.1lf%%"), cpuUsage);
+	//		m_list.SetItemText(index, 2, buffer);
+	//		it->lfCPUUsage = cpuUsage;
+	//	}
+	//	// 下一个
+	//	++index;
+	//	it++;			// 不该放到 for 中（因为有erase操作
+	//}
+	//// 4. 插入数据到列表中，即插入新创建进程（新列表元素到旧列表中找, 没找到即新建的		
+	//index = m_list.GetItemCount();
+	//for (auto&i : newProcList) {
+	//	if (false == IsFindItemInList(m_procList, i.th32ProcessID))
+	//	{
+	//		// 添加到列表数组
+	//		m_procList.push_back(i);
+	//		// 插入到列表控件
+	//		CString buffer;
+	//		m_list.InsertItem(index, _T(""));// 插入一行
+	//		m_list.UpdateWindow();
+	//		m_list.SetItemText(index, 0, i.szExeFile);// 名称
+	//		buffer.Format(_T("%d"), i.th32ProcessID);
+	//		m_list.SetItemText(index, 1, buffer);// PID
+	//		m_list.SetItemText(index, 2, L"");// CPU？？
+	//		buffer.Format(_T("%12dKb"), (double)i.dwMemoryUsage);
+	//		m_list.SetItemText(index, 3, buffer);// 内存
+	//		index++;
+	//	}
+	//}
+	//// 5. 离开临界区
+	////LeaveCriticalSection(&g_critical_section);
 }
 
 
-void CProcessDlg::GetAllRunningProcess(std::vector<PROCESSENTRY32>* processList)
-{
-	// TODO: 在此处添加实现代码.
-
-		// 获取进程快照句柄
-	HANDLE hSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, NULL);
-	// 保存进程信息的变量
-	PROCESSENTRY32 pe = { sizeof(PROCESSENTRY32) };
-	// 遍历进程，添入vector
-	Process32First(hSnap, &pe);
-	do {
-		processList->push_back(pe);
-	} while (Process32Next(hSnap, &pe));
-	// 关闭快照句柄
-	CloseHandle(hSnap);
-}
+//void CProcessDlg::GetAllRunningProcess(std::vector<PROCESSENTRY32>* processList)
+//{
+//	// TODO: 在此处添加实现代码.
+//
+//		// 获取进程快照句柄
+//	HANDLE hSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, NULL);
+//	// 保存进程信息的变量
+//	PROCESSENTRY32 pe = { sizeof(PROCESSENTRY32) };
+//	// 遍历进程，添入vector
+//	Process32First(hSnap, &pe);
+//	do {
+//		processList->push_back(pe);
+//	} while (Process32Next(hSnap, &pe));
+//	// 关闭快照句柄
+//	CloseHandle(hSnap);
+//}
 
 
 void CProcessDlg::OnTimer(UINT_PTR nIDEvent)
@@ -160,7 +220,7 @@ void CProcessDlg::OnTimer(UINT_PTR nIDEvent)
 }
 
 
-bool CProcessDlg::IsFindItemInList(std::vector<PROCESSENTRY32> list, DWORD pid)
+bool CProcessDlg::IsFindItemInList(std::vector<PROCESSINFO> list, DWORD pid)
 {
 	// TODO: 在此处添加实现代码.
 	for (int i = 0; i < list.size(); i++)

@@ -8,7 +8,7 @@
 #include "afxdialogex.h"
 
 #include "CProcessDlg.h"
-#include "COther.h"
+#include "CWindowDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -106,25 +106,27 @@ BOOL CTaskManagerDlg::OnInitDialog()
 	// TODO: 在此添加额外的初始化代码
 
 	// tab 控件添加项
-	m_tab.InsertItem(0, L"进程信息");
-	m_tab.InsertItem(1, L"其他信息");
+	m_tab.InsertItem(0, L"进程列表");
+	m_tab.InsertItem(1, L"窗口列表");
+	//m_tab.InsertItem(2, L"垃圾清理");
 	// 给子窗口指针赋值
-	CDialogEx * pSubProcWnd = new CProcessDlg();
-	CDialogEx * pSubOtherWnd = new COther();
+	CDialogEx * pSubProcess = new CProcessDlg();
+	CDialogEx * pSubWindow = new CWindowDlg();
+
 	//创建子窗口
-	pSubProcWnd->Create(IDD_DIALOG_PROCESS, &m_tab);
-	pSubOtherWnd->Create(IDD_DIALOG_OTHER, &m_tab);
-	m_tabSubWnd.push_back(pSubProcWnd);
-	m_tabSubWnd.push_back(pSubOtherWnd);
+	pSubProcess->Create(IDD_DIALOG_PROCESS, &m_tab);
+	pSubWindow->Create(IDD_DIALOG_WINDOW, &m_tab);
+	m_tabSubWnd.push_back(pSubProcess);
+	m_tabSubWnd.push_back(pSubWindow);
 	// 控制两个窗口的大小
 	CRect  rec;
 	m_tab.GetClientRect(rec);
 	rec.DeflateRect(8, 40, 10, 10);
-	pSubProcWnd->MoveWindow(rec);
-	pSubOtherWnd->MoveWindow(rec);
+	pSubProcess->MoveWindow(rec);
+	pSubWindow->MoveWindow(rec);
 	//初始显示第一个窗口
-	pSubProcWnd->ShowWindow(SW_SHOW);
-	pSubOtherWnd->ShowWindow(SW_HIDE);
+	pSubProcess->ShowWindow(SW_SHOW);
+	pSubWindow->ShowWindow(SW_HIDE);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }

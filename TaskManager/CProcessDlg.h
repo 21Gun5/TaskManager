@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <TlHelp32.h>
+#include "CTools.h"
 
 // CProcessDlg 对话框
 
@@ -26,10 +27,10 @@ public:
 	CListCtrl m_list;
 	virtual BOOL OnInitDialog();
 	void UpdateProcessList();
-	void GetAllRunningProcess(std::vector<PROCESSENTRY32>* processList);
+//	void GetAllRunningProcess(std::vector<PROCESSENTRY32>* processList);
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
-	std::vector<PROCESSENTRY32> m_procList;
-	bool IsFindItemInList(std::vector<PROCESSENTRY32> list, DWORD pid);
+	std::vector<PROCESSINFO> m_procList;
+	bool IsFindItemInList(std::vector<PROCESSINFO> list, DWORD pid);
 	CMenu m_menu;
 	afx_msg void OnRclickList1(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnMenuKillproc();

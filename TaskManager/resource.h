@@ -8,7 +8,7 @@
 #define IDD_TASKMANAGER_DIALOG          102
 #define IDR_MAINFRAME                   128
 #define IDD_DIALOG_PROCESS              130
-#define IDD_DIALOG_OTHER                132
+#define IDD_DIALOG_WINDOW                132
 #define IDR_MENU1                       134
 #define IDD_DIALOG_MODULE               139
 #define IDC_TAB1                        1000
