@@ -105,3 +105,59 @@ void getWindows(std::list<HWND>* wndList)
 {
 	EnumWindows(wndProc, (LPARAM)wndList);
 }
+
+
+// 初始化一个全局互斥体,在遍历文件时使用.
+static HANDLE g_hMutex = []() -> HANDLE {
+	return CreateMutex(0, FALSE, NULL);
+}();
+
+// 查找文件
+bool findFiles(const TCHAR* dir, const TCHAR* filter, std::list<FILEINFO>* filelist, HWND hWnd, UINT uMsg)
+{
+	CString path = dir;
+	WIN32_FIND_DATA fData = { 0 };
+	HANDLE hFind = FindFirstFile(path + _T("\\*"), &fData);
+	if (hFind == INVALID_HANDLE_VALUE) {
+		return false;
+	}
+	FILEINFO fInfo = { 0 };
+	do
+	{
+		if (_tcscmp(fData.cFileName, _T(".")) == 0 || _tcscmp(fData.cFileName, _T("..")) == 0) {
+			continue;
+		}
+		// 是否是目录
+		if (fData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+			// 递归遍历下级目录
+			findFiles(path + "\\" + fData.cFileName, filter, filelist, hWnd, uMsg);
+		}
+		else {
+			// 获取文件扩展名
+			TCHAR* pExtName = fData.cFileName + _tcslen(fData.cFileName);
+			while (pExtName != fData.cFileName && *pExtName != '.')
+				--pExtName;
+			// 判断扩展名是否是要过滤出来的文件扩展名
+			if (_tcsstr(filter, pExtName) != NULL) {
+				// 将文件信息保存到数组中
+				memcpy(&fInfo, &fData, sizeof(FILEINFO) - sizeof(fInfo.path));
+				// 拼接完整的路径
+				_stprintf_s(fInfo.path, _countof(fInfo.path), _T("%s\\%s"), dir, fData.cFileName);
+
+				// 如果列表不为空,则将数据保存到列表
+				if (filelist)
+				{
+					WaitForSingleObject(g_hMutex, -1);
+					filelist->push_back(fInfo);
+					ReleaseMutex(g_hMutex);
+				}
+				// 如果窗口句柄不为空, 则将数据发送到窗口
+				if (hWnd)
+				{
+					SendMessage(hWnd, uMsg, (WPARAM)&fInfo, 0);
+				}
+			}
+		}
+	} while (FindNextFile(hFind, &fData));
+	return true;
+}

@@ -1,3 +1,3 @@
-﻿  CWindowDlg.cpp
-c:\users\ry1yn\source\repos\15pb\taskmanager\cwindowdlg.cpp(67): warning C4312: “类型强制转换”: 从“DWORD”转换到更大的“HICON”
+﻿  CTools.cpp
+c:\users\ry1yn\source\repos\15pb\taskmanager\ctools.cpp(49): warning C4244: “=”: 从“SIZE_T”转换到“double”，可能丢失数据
   TaskManager.vcxproj -> C:\Users\ry1yn\source\repos\15PB\x64\Debug\TaskManager.exe

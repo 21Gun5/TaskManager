@@ -9,6 +9,7 @@
 
 #include "CProcessDlg.h"
 #include "CWindowDlg.h"
+#include "CVSCleanDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -108,25 +109,30 @@ BOOL CTaskManagerDlg::OnInitDialog()
 	// tab 控件添加项
 	m_tab.InsertItem(0, L"进程列表");
 	m_tab.InsertItem(1, L"窗口列表");
-	//m_tab.InsertItem(2, L"垃圾清理");
+	m_tab.InsertItem(2, L"垃圾清理");
 	// 给子窗口指针赋值
 	CDialogEx * pSubProcess = new CProcessDlg();
 	CDialogEx * pSubWindow = new CWindowDlg();
+	CDialogEx * pSubVSClean = new CVSCleanDlg();
 
 	//创建子窗口
 	pSubProcess->Create(IDD_DIALOG_PROCESS, &m_tab);
 	pSubWindow->Create(IDD_DIALOG_WINDOW, &m_tab);
+	pSubVSClean->Create(IDD_DIALOG_VSCLEAN, &m_tab);
 	m_tabSubWnd.push_back(pSubProcess);
 	m_tabSubWnd.push_back(pSubWindow);
+	m_tabSubWnd.push_back(pSubVSClean);
 	// 控制两个窗口的大小
 	CRect  rec;
 	m_tab.GetClientRect(rec);
 	rec.DeflateRect(8, 40, 10, 10);
 	pSubProcess->MoveWindow(rec);
 	pSubWindow->MoveWindow(rec);
+	pSubVSClean->MoveWindow(rec);
 	//初始显示第一个窗口
 	pSubProcess->ShowWindow(SW_SHOW);
 	pSubWindow->ShowWindow(SW_HIDE);
+	pSubVSClean->ShowWindow(SW_HIDE);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }

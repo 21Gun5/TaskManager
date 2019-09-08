@@ -8,11 +8,15 @@
 #define IDD_TASKMANAGER_DIALOG          102
 #define IDR_MAINFRAME                   128
 #define IDD_DIALOG_PROCESS              130
-#define IDD_DIALOG_WINDOW                132
+#define IDD_DIALOG_WINDOW               132
 #define IDR_MENU1                       134
 #define IDD_DIALOG_MODULE               139
+#define IDD_DIALOG_VSCLEAN              141
 #define IDC_TAB1                        1000
 #define IDC_LIST1                       1001
+#define IDC_EDIT1                       1002
+#define IDC_EDIT2                       1003
+#define IDC_BUTTON1                     1004
 #define ID_MENU_KILL                    32771
 #define ID_MENU_KILLPROC                32772
 #define ID_32773                        32773
@@ -22,9 +26,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        141
+#define _APS_NEXT_RESOURCE_VALUE        143
 #define _APS_NEXT_COMMAND_VALUE         32775
-#define _APS_NEXT_CONTROL_VALUE         1002
+#define _APS_NEXT_CONTROL_VALUE         1005
 #define _APS_NEXT_SYMED_VALUE           105
 #endif
 #endif

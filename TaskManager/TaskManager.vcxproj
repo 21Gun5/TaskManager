@@ -184,6 +184,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CModuleDlg.h" />
+    <ClInclude Include="CVSCleanDlg.h" />
     <ClInclude Include="CWindowDlg.h" />
     <ClInclude Include="CProcessDlg.h" />
     <ClInclude Include="CTools.h" />
@@ -195,6 +196,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CModuleDlg.cpp" />
+    <ClCompile Include="CVSCleanDlg.cpp" />
     <ClCompile Include="CWindowDlg.cpp" />
     <ClCompile Include="CProcessDlg.cpp" />
     <ClCompile Include="CTools.cpp" />
